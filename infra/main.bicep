@@ -11,7 +11,7 @@ param randomString string
 
 @minLength(1)
 @description('Primary location for all resources')
-param location string
+param location string = 'australiaeast'
 
 param aadWebClientId string = ''
 param aadMgmtClientId string = ''
@@ -25,26 +25,26 @@ param azureOpenAIServiceName string
 param azureOpenAIResourceGroup string
 @secure()
 param azureOpenAIServiceKey string
-param openAiServiceName string = ''
+param openAiServiceName string = 'autgpt-openai'
 param openAiSkuName string = 'S0'
-param cosmosdbName string = ''
-param formRecognizerName string = ''
-param enrichmentName string = ''
+param cosmosdbName string = 'autgpt-cosmos'
+param formRecognizerName string = 'autgpt-form-recognizer'
+param enrichmentName string = 'autgpt-enrichment'
 param formRecognizerSkuName string = 'S0'
 param enrichmentSkuName string = 'S0'
-param appServicePlanName string = ''
-param enrichmentAppServicePlanName string = ''
-param resourceGroupName string = ''
-param logAnalyticsName string = ''
-param applicationInsightsName string = ''
-param backendServiceName string = ''
-param enrichmentServiceName string = ''
-param functionsAppName string = ''
-param mediaServiceName string = ''
-param videoIndexerName string = ''
-param searchServicesName string = ''
+param appServicePlanName string = 'autgpt-service-plan'
+param enrichmentAppServicePlanName string = 'autgpt-enrichment-service-plan'
+param resourceGroupName string = 'autgpt'
+param logAnalyticsName string = 'autgpt-log-analytics'
+param applicationInsightsName string = 'autgpt-application-insights'
+param backendServiceName string = 'autgpt-backend'
+param enrichmentServiceName string = 'autgpt-enrichment'
+param functionsAppName string = 'autgpt-functions-app'
+param mediaServiceName string = 'autgptmediaservice'
+param videoIndexerName string = 'autgpt-video-indexer'
+param searchServicesName string = 'autgpt-search-service'
 param searchServicesSkuName string = 'standard'
-param storageAccountName string = ''
+param storageAccountName string = 'autgptstorageaccount'
 param containerName string = 'content'
 param uploadContainerName string = 'upload'
 param functionLogsContainerName string = 'logs'
@@ -58,14 +58,14 @@ param sentenceTransformersModelName string = 'BAAI/bge-small-en-v1.5'
 param sentenceTransformerEmbeddingVectorSize string = '384'
 param embeddingsDeploymentCapacity int = 240
 param chatWarningBannerText string = ''
-param chatGptModelName string = 'gpt-35-turbo-16k'
-param chatGptModelVersion string = '0613'
+param chatGptModelName string = 'gpt-4'
+param chatGptModelVersion string = '1106-preview'
 param chatGptDeploymentCapacity int = 240
 // metadata in our chunking strategy adds about 180-200 tokens to the size of the chunks, 
 // our default target size is 750 tokens so the chunk files that get indexed will be around 950 tokens each
 param chunkTargetSize string = '750'
 param targetPages string = 'ALL'
-param formRecognizerApiVersion string = '2023-07-31'
+param formRecognizerApiVersion string = '2022-08-31'
 param queryTermLanguage string = 'English'
 param isGovCloudDeployment bool = contains(location, 'usgov')
 
@@ -108,8 +108,8 @@ param principalId string = ''
 param kvAccessObjectId string = ''
 
 var abbrs = loadJsonContent('abbreviations.json')
-var tags = { ProjectName: 'Information Assistant', BuildNumber: buildNumber }
-var prefix = 'infoasst'
+var tags = { ProjectName: 'AUTGPT_v4', BuildNumber: buildNumber }
+var prefix = 'autgpt'
 
 // Organize resources in a resource group
 resource rg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
@@ -155,8 +155,8 @@ module funcServicePlan 'core/host/funcserviceplan.bicep' = {
     location: location
     tags: tags
     sku: {
-      name: 'S2'
-      capacity: 2
+      name: 'S1'
+      capacity: 1
     }
     kind: 'linux'
   }
@@ -171,7 +171,7 @@ module enrichmentAppServicePlan 'core/host/enrichmentappserviceplan.bicep' = {
     location: location
     tags: tags
     sku: {
-      name: 'P1v3'
+      name: 'B1'
       tier: 'PremiumV3'
       size: 'P1v3'
       family: 'Pv3'
@@ -179,7 +179,7 @@ module enrichmentAppServicePlan 'core/host/enrichmentappserviceplan.bicep' = {
     }
     kind: 'linux'
     reserved: true
-  }
+    }
 }
 
 // Create an App Service Plan and supporting services for the enrichment app service
@@ -203,7 +203,7 @@ module enrichmentApp 'core/host/enrichmentappservice.bicep' = {
     appSettings: {
       EMBEDDINGS_QUEUE: embeddingsQueue
       LOG_LEVEL: 'DEBUG'
-      DEQUEUE_MESSAGE_BATCH_SIZE: 3
+      DEQUEUE_MESSAGE_BATCH_SIZE: 1
       AZURE_BLOB_STORAGE_ACCOUNT: storage.outputs.name
       AZURE_BLOB_STORAGE_CONTAINER: containerName
       AZURE_BLOB_STORAGE_UPLOAD_CONTAINER: uploadContainerName
@@ -295,7 +295,7 @@ module cognitiveServices 'core/ai/cognitiveservices.bicep' = if (!useExistingAOA
     location: location
     tags: tags
     keyVaultName: kvModule.outputs.keyVaultName
-    sku: {
+        sku: {
       name: openAiSkuName
     }
     deployments: [
@@ -500,7 +500,7 @@ module functions 'core/function/function.bicep' = {
     appInsightsInstrumentationKey: logging.outputs.applicationInsightsInstrumentationKey
     blobStorageAccountName: storage.outputs.name
     blobStorageAccountEndpoint: storage.outputs.primaryEndpoints.blob
-    blobStorageAccountOutputContainerName: containerName
+   blobStorageAccountOutputContainerName: containerName
     blobStorageAccountUploadContainerName: uploadContainerName
     blobStorageAccountLogContainerName: functionLogsContainerName
     formRecognizerEndpoint: formrecognizer.outputs.formRecognizerAccountEndpoint
@@ -536,7 +536,7 @@ module functions 'core/function/function.bicep' = {
     EMBEDDINGS_QUEUE: embeddingsQueue
     azureSearchIndex: searchIndexName
     azureSearchServiceEndpoint: searchServices.outputs.endpoint
-
+    
   }
   dependsOn: [
     appServicePlan
@@ -771,5 +771,5 @@ output TARGET_EMBEDDINGS_MODEL string = useAzureOpenAIEmbeddings ? '${abbrs.open
 output AZURE_OPENAI_EMBEDDING_DEPLOYMENT_NAME string = azureOpenAIEmbeddingDeploymentName
 output USE_AZURE_OPENAI_EMBEDDINGS bool = useAzureOpenAIEmbeddings
 output EMBEDDING_DEPLOYMENT_NAME string = useAzureOpenAIEmbeddings ? azureOpenAIEmbeddingDeploymentName : sentenceTransformersModelName
-output ENRICHMENT_APPSERVICE_NAME string = enrichmentApp.outputs.name 
+output ENRICHMENT_APPSERVICE_NAME string = enrichmentApp.outputs.name
 output DEPLOYMENT_KEYVAULT_NAME string = kvModule.outputs.keyVaultName
