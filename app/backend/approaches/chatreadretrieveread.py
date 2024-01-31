@@ -181,6 +181,7 @@ class ChatReadRetrieveReadApproach(Approach):
 
         # Generate embedding using REST API
         url = f'{self.embedding_service_url}/models/{self.escaped_target_model}/embed'
+        # url = f'http://127.0.0.1:5001/models/{self.escaped_target_model}/embed'  # For running it locally
         data = [f'"{generated_query}"']
         headers = {
                 'Accept': 'application/json',  

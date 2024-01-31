@@ -49,7 +49,7 @@ param containerName string = 'content'
 param uploadContainerName string = 'upload'
 param functionLogsContainerName string = 'logs'
 param searchIndexName string = 'vector-index'
-param chatGptDeploymentName string = 'gpt-35-turbo-16k'
+param chatGptDeploymentName string = 'gpt-4-32k'
 param azureOpenAIEmbeddingDeploymentName string = 'text-embedding-ada-002'
 param azureOpenAIEmbeddingsModelName string = 'text-embedding-ada-002'
 param azureOpenAIEmbeddingsModelVersion string = '2'
@@ -58,8 +58,8 @@ param sentenceTransformersModelName string = 'BAAI/bge-small-en-v1.5'
 param sentenceTransformerEmbeddingVectorSize string = '384'
 param embeddingsDeploymentCapacity int = 240
 param chatWarningBannerText string = ''
-param chatGptModelName string = 'gpt-4'
-param chatGptModelVersion string = '1106-preview'
+param chatGptModelName string = 'gpt-4-32k'
+param chatGptModelVersion string = '0613'
 param chatGptDeploymentCapacity int = 240
 // metadata in our chunking strategy adds about 180-200 tokens to the size of the chunks, 
 // our default target size is 750 tokens so the chunk files that get indexed will be around 950 tokens each
@@ -184,6 +184,7 @@ module enrichmentAppServicePlan 'core/host/enrichmentappserviceplan.bicep' = {
 
 // Create an App Service Plan and supporting services for the enrichment app service
 module enrichmentApp 'core/host/enrichmentappservice.bicep' = {
+
   name: 'enrichmentApp'
   scope: rg
   params: {
@@ -215,6 +216,7 @@ module enrichmentApp 'core/host/enrichmentappservice.bicep' = {
       COSMOSDB_TAGS_CONTAINER_NAME: cosmosdb.outputs.CosmosDBTagsContainerName
       MAX_EMBEDDING_REQUEUE_COUNT: 5
       EMBEDDING_REQUEUE_BACKOFF: 60
+      
       AZURE_OPENAI_SERVICE: useExistingAOAIService ? azureOpenAIServiceName : cognitiveServices.outputs.name
       AZURE_OPENAI_EMBEDDING_DEPLOYMENT_NAME: azureOpenAIEmbeddingDeploymentName
       AZURE_SEARCH_INDEX: searchIndexName
