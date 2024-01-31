@@ -11,9 +11,9 @@ export type ExampleModel = {
 };
 
 const EXAMPLES: ExampleModel[] = [
-    { text: "How is strengthening student data privacy accomplished?", value: "How is strengthening student data privacy accomplished?" },
-    { text: "What are Microsoft's primary sources of revenue?", value: "What are Microsoft's primary sources of revenue?" },
-    { text: "What are some flavors of Breyers?", value: "What are some flavors of Breyers?" }
+    { text: "How can I apply the Te Aronui framework to my work?", value: "How can I apply the Te Aronui framework to my work?" },
+    { text: "Tell me about AUT's refund policy for international students.", value: "Tell me about AUT's refund policy for international students." },
+    { text: "What is our external research revenue?", value: "What is our external research revenue?" }
 ];
 
 interface Props {
