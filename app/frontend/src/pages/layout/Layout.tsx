@@ -15,21 +15,21 @@ const Layout = () => {
                 <WarningBanner />
                 <div className={styles.headerContainer}>
                     <div className={styles.headerTitleContainer}>
-                        <img src={autlogo} alt="Azure OpenAI" className={styles.headerLogo} />
+                        <img src={autlogo} alt="AUT Logo" className={styles.headerLogo} />
                         <h3 className={styles.headerTitle}><Title/></h3>
                     </div>
                     <nav>
                         <ul className={styles.headerNavList}>
-                            <li>
+                            {/* <li>
                                 <NavLink to="/" className={({ isActive }) => (isActive ? styles.headerNavPageLinkActive : styles.headerNavPageLink)}>
                                     Chat
                                 </NavLink>
-                            </li>
-                            <li className={styles.headerNavLeftMargin}>
+                            </li> */}
+                            {/* <li className={styles.headerNavLeftMargin}>
                                 <NavLink to="/content" className={({ isActive }) => (isActive ? styles.headerNavPageLinkActive : styles.headerNavPageLink)}>
                                     Manage Content
                                 </NavLink>
-                            </li>
+                            </li> */}
                         </ul>
                     </nav>
                 </div>

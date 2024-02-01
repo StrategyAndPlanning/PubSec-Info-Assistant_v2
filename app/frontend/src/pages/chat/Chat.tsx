@@ -36,7 +36,7 @@ const Chat = () => {
     const [excludeCategory, setExcludeCategory] = useState<string>("");
     const [useSuggestFollowupQuestions, setUseSuggestFollowupQuestions] = useState<boolean>(false);
     const [userPersona, setUserPersona] = useState<string>("analyst");
-    const [systemPersona, setSystemPersona] = useState<string>("an Assistant");
+    const [systemPersona, setSystemPersona] = useState<string>("Assistant named AUTGPT at Auckland University of Technology in New Zealand");
     const [aiPersona, setAiPersona] = useState<string>("");
     // Setting responseLength to 2048 by default, this will effect the default display of the ResponseLengthButtonGroup below.
     // It must match a valid value of one of the buttons in the ResponseLengthButtonGroup.tsx file. 
@@ -251,46 +251,41 @@ const Chat = () => {
                 <div className={styles.chatContainer}>
                     {!lastQuestionRef.current ? (
                         <div className={styles.chatEmptyState}>
-                            <div>
-                                <SparkleFilled fontSize={"100px"} primaryFill={"rgba(0, 0, 0, 1)"} aria-hidden="true" aria-label="Chat logo" />
-                                <img src={autlogo} alt="Azure OpenAI" className={styles.headerLogo}/>
+                            <div style={{ display: 'flex', alignItems: 'flex-start', paddingTop: '20px'}}>
+                                <img src={autlogo} alt="Azure OpenAI" className={styles.headerLogo} height={'50px'} />
                             </div>
                             <h1 className={styles.chatEmptyStateTitle}>Kia ora, start chatting</h1>
-
-                            <span className={styles.chatEmptyObjectives}>
-                                The objective of the AUTGPT, is to leverage a combination of AI components to enable you to chat with AUT’s own data. AUTGPT attempts to provide responses that are:
-                            </span>
                             <span className={styles.chatEmptyObjectivesList}>
                                 <span className={styles.chatEmptyObjectivesListItem}>
-                                    <ClockFilled fontSize={"40px"} primaryFill={"rgba(115, 118, 225, 1)"} aria-hidden="true" aria-label="Clock icon" />
+                                    <ClockFilled fontSize={"40px"} primaryFill={"rgba(139, 69, 141, 1)"} aria-hidden="true" aria-label="Clock icon" />
                                     <span className={styles.chatEmptyObjectivesListItemText}>Current: Based on the latest "up to date" information at AUT</span>
                                 </span>
                                 <span className={styles.chatEmptyObjectivesListItem}>
-                                    <TargetArrowFilled fontSize={"40px"} primaryFill={"rgba(115, 118, 225, 1)"} aria-hidden="true" aria-label="Target icon" />
+                                    <TargetArrowFilled fontSize={"40px"} primaryFill={"rgba(139, 69, 141, 1)"} aria-hidden="true" aria-label="Target icon" />
                                     <span className={styles.chatEmptyObjectivesListItemText}>Relevant: Responses should leverage AUT's data</span>
                                 </span>
                                 <span className={styles.chatEmptyObjectivesListItem}>
-                                    <OptionsFilled fontSize={"40px"} primaryFill={"rgba(115, 118, 225, 1)"} aria-hidden="true" aria-label="Options icon" />
-                                    <span className={styles.chatEmptyObjectivesListItemText}>Controlled: You can use the <b>Adjust</b> feature to control the response parameters</span>
+                                    <OptionsFilled fontSize={"40px"} primaryFill={"rgba(139, 69, 141, 1)"} aria-hidden="true" aria-label="Options icon" />
+                                    <span className={styles.chatEmptyObjectivesListItemText}>Controlled: You can use the adjust feature to control the response parameters</span>
                                 </span>
                                 <span className={styles.chatEmptyObjectivesListItem}>
-                                    <SearchInfoFilled fontSize={"40px"} primaryFill={"rgba(115, 118, 225, 1)"} aria-hidden="true" aria-label="Search Info icon" />
+                                    <SearchInfoFilled fontSize={"40px"} primaryFill={"rgba(139, 69, 141, 1)"} aria-hidden="true" aria-label="Search Info icon" />
                                     <span className={styles.chatEmptyObjectivesListItemText}>Referenced: Responses should include specific citations</span>
                                 </span>
                                 <span className={styles.chatEmptyObjectivesListItem}>
-                                    <PersonStarFilled fontSize={"40px"} primaryFill={"rgba(115, 118, 225, 1)"} aria-hidden="true" aria-label="Person Star icon" />
-                                    <span className={styles.chatEmptyObjectivesListItemText}>Personalized: Responses should be tailored to your personal settings you <b>Adjust</b> to</span>
+                                    <PersonStarFilled fontSize={"40px"} primaryFill={"rgba(139, 69, 141, 1)"} aria-hidden="true" aria-label="Person Star icon" />
+                                    <span className={styles.chatEmptyObjectivesListItemText}>Personalised: Responses are tailored to your personal settings</span>
                                 </span>
                                 <span className={styles.chatEmptyObjectivesListItem}> 
-                                    <TextBulletListSquareSparkleFilled fontSize={"40px"} primaryFill={"rgba(115, 118, 225, 1)"} aria-hidden="true" aria-label="Text Bullet List Square Sparkle icon" />
-                                    <span className={styles.chatEmptyObjectivesListItemText}>Explainable: Each response should include details on the <b>Thought Process</b> that was used</span>
+                                    <TextBulletListSquareSparkleFilled fontSize={"40px"} primaryFill={"rgba(139, 69, 141, 1)"} aria-hidden="true" aria-label="Text Bullet List Square Sparkle icon" />
+                                    <span className={styles.chatEmptyObjectivesListItemText}>Explainable: Each response should include details on the thought process that was used</span>
                                 </span>
-                            </span>
-                            <span className={styles.chatEmptyObjectives}>
-                                <i>Though AUTGPT is focused on the key areas above, human oversight to confirm accuracy is crucial. All responses from the system must be verified with the citations provided.</i>
                             </span>
                             <h2 className={styles.chatEmptyStateSubtitle}>Ask anything or try an example</h2>
                             <ExampleList onExampleClicked={onExampleClicked} />
+                            <span className={styles.chatEmptyObjectives}>
+                                <i>Human oversight to confirm accuracy is crucial. All responses from the system must be verified with the citations provided.</i>
+                            </span>
                         </div>
                     ) : (
                         <div className={styles.chatMessageStream}>

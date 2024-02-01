@@ -21,7 +21,7 @@
 .questionInputButtonsContainer {
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
+    justify-content: center;
 }
 
 .questionInputSendButton {
@@ -36,6 +36,7 @@
     height: 100%;
     vertical-align: middle;
     padding-top: 5px;
+    padding-left: 5px;
 }
 
 .questionClearChatButton {
